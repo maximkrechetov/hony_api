@@ -11,14 +11,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="395da6bc-90c8-405c-a220-5dd73233df8f" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/app/models/account.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/models/account_type.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/models/comment.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/models/default_model.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/models/post.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/models/post_tag.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/models/tag.py" afterDir="false" />
-      <change beforePath="$USER_HOME$/projects/mordor/.idea/vcs.xml" beforeDir="false" afterPath="$USER_HOME$/projects/mordor/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/models/account.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/account.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/models/post.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/post.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/migrations/versions/c41126b443fe_initial.py" beforeDir="false" afterPath="$PROJECT_DIR$/migrations/versions/c41126b443fe_initial.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -43,7 +40,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/app/models" />
+    <property name="last_opened_file_path" value="$USER_HOME$/projects/billy" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -71,8 +68,13 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="WindowStateProjectService">
+    <state x="471" y="124" key="FileChooserDialogImpl" timestamp="1603088194448">
+      <screen x="0" y="0" width="1366" height="732" />
+    </state>
+    <state x="471" y="124" key="FileChooserDialogImpl/0.0.1366.732@0.0.1366.732" timestamp="1603088194448" />
     <state x="387" y="105" width="592" height="522" key="find.popup" timestamp="1603077343394">
       <screen x="0" y="0" width="1366" height="732" />
     </state>

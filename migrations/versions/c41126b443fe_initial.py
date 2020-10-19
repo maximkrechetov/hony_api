@@ -7,7 +7,7 @@ Create Date: 2020-10-19 03:11:17.455550
 """
 from alembic import op
 import sqlalchemy as sa
-import sqlalchemy_jsonfield as sajson
+import sqlalchemy_utils as su
 
 
 # revision identifiers, used by Alembic.
@@ -32,6 +32,17 @@ def upgrade():
         'account',
         sa.Column('id', sa.Integer, primary_key=True, autoincrement=True),
         sa.Column('phone', sa.String(16), nullable=False),
+        sa.Column(
+            'password',
+            su.PasswordType(
+                schemes=[
+                    'pbkdf2_sha512',
+                    'md5_crypt'
+                ],
+                deprecated=['md5_crypt']
+            ),
+            nullable=False
+        ),
         sa.Column('nickname', sa.String(64), nullable=True),
         sa.Column('avatar', sa.String(128), nullable=True),
         sa.Column('account_type_id', sa.Integer, sa.ForeignKey('account_type.id'), index=True, nullable=False),
@@ -52,6 +63,7 @@ def upgrade():
     op.create_table(
         'post',
         sa.Column('id', sa.Integer, primary_key=True, autoincrement=True),
+        sa.Column('title', sa.String(128), nullable=False),
         sa.Column('text', sa.String(512), nullable=False),
         sa.Column('author_id', sa.Integer, sa.ForeignKey('account.id'), index=True, nullable=False),
         sa.Column('created_at', sa.DateTime, nullable=False, server_default=sa.func.now()),
