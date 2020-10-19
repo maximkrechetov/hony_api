@@ -1,0 +1,61 @@
+version: '3'
+
+services:
+  app:
+    build: .
+    expose:
+      - 8000
+    ports:
+      - 8000:8000
+    command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", '8000', "--reload"]
+    restart: 'no'
+    volumes:
+      - .:/app
+    environment:
+      VIRTUAL_HOST: hony-app.test
+      DEBUG: 'true'
+      DB_HOST: db
+      DB_USER: hony
+      DB_PASSWORD: honypassword
+      DB_NAME: hony
+    networks:
+      - local
+      - dev
+
+  db:
+    image: postgres:alpine
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_PASSWORD: honypassword
+      POSTGRES_USER: hony
+      POSTGRES_DB: hony
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    networks:
+      - local
+
+  migrations:
+    build: .
+    command: [ 'bash', '-c', 'alembic upgrade head' ]
+    restart: 'no'
+    volumes:
+      - .:/app
+    environment:
+      DB_HOST: db
+      DB_USER: hony
+      DB_PASSWORD: honypassword
+      DB_NAME: hony
+    networks:
+      - local
+    depends_on:
+      - db
+
+volumes:
+  db_data:
+
+networks:
+  local:
+  dev:
+    external:
+      name: dev-services
