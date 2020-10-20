@@ -1,8 +1,8 @@
 from sqlalchemy import Column, Integer, String, DateTime, func
-from app.database import db
+from app.database import Base
 
 
-class AccountType(db.Model):
+class AccountType(Base):
     __tablename__ = 'account_type'
 
     id = Column(Integer, primary_key=True, autoincrement=True)

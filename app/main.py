@@ -1,7 +1,10 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from .database import db
-from .routes import common
+from .database import engine, SessionLocal
+from .routes import common, auth
+from .models import Base
+
+Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
@@ -14,17 +17,5 @@ app.add_middleware(
 )
 
 
-@app.on_event('startup')
-async def startup():
-    await db.connect()
-
-
-@app.on_event('shutdown')
-async def shutdown():
-    await db.disconnect()
-
-
-app.include_router(
-    common.router,
-    tags=['common']
-)
+app.include_router(common.router, tags=['common'])
+app.include_router(auth.router, tags=['auth'])

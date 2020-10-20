@@ -1,8 +1,8 @@
 from sqlalchemy import Column, Integer, String, DateTime, func
-from app.database import db
+from app.database import Base
 
 
-class DefaultModel(db.Model):
+class DefaultModel(Base):
     __abstract__ = True
 
     id = Column(Integer, primary_key=True, autoincrement=True)

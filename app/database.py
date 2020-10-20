@@ -1,5 +1,6 @@
-import databases
-import sqlalchemy
+from sqlalchemy import create_engine
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
 
 from os import environ
 
@@ -10,12 +11,19 @@ db_password = environ.get('DB_PASSWORD')
 
 db_url = f'postgresql://{db_user}:{db_password}@{db_host}/{db_name}'
 
-metadata = sqlalchemy.MetaData()
-db = databases.Database(db_url)
+engine = create_engine(db_url)
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
-db_engine = sqlalchemy.create_engine(
-    db_url,
-    # connect_args={'check_same_thread': False}
-)
+Base = declarative_base()
 
-metadata.create_all(db_engine)
+
+def get_db():
+    """
+    Yields db connection
+    :return:
+    """
+    try:
+        db = SessionLocal()
+        yield db
+    finally:
+        db.close()

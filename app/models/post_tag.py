@@ -1,6 +1,5 @@
 from .default_model import DefaultModel
-from sqlalchemy import Column, Integer, String, DateTime, func, orm
-from app.database import db
+from sqlalchemy import Column, Integer, String, ForeignKey, orm
 
 
 class PostTag(DefaultModel):

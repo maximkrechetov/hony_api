@@ -1,7 +1,6 @@
 from .default_model import DefaultModel
-from sqlalchemy import Column, Integer, String, DateTime, func, orm
+from sqlalchemy import Column, Integer, String, DateTime, orm, ForeignKey
 from sqlalchemy_utils import PasswordType
-from app.database import db
 
 
 class Account(DefaultModel):
