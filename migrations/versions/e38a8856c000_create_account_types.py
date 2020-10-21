@@ -25,4 +25,5 @@ def upgrade():
 
 
 def downgrade():
-    pass
+    op.get_bind().execute('DELETE FROM account')
+    op.get_bind().execute('DELETE FROM account_type')

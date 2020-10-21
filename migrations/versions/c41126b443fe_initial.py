@@ -43,10 +43,13 @@ def upgrade():
             ),
             nullable=False
         ),
-        sa.Column('nickname', sa.String(64), nullable=True),
+        sa.Column('nickname', sa.String(64), nullable=False),
+        sa.Column('first_name', sa.String(32), nullable=False),
+        sa.Column('last_name', sa.String(32), nullable=False),
         sa.Column('avatar', sa.String(128), nullable=True),
         sa.Column('account_type_id', sa.Integer, sa.ForeignKey('account_type.id'), index=True, nullable=False),
         sa.Column('account_active_to', sa.DateTime, nullable=True),
+        sa.Column('birth_date', sa.DateTime, nullable=False),
         sa.Column('created_at', sa.DateTime, nullable=False, server_default=sa.func.now()),
         sa.Column('updated_at', sa.DateTime, nullable=False, server_default=sa.func.now())
     )

@@ -15,16 +15,14 @@ async def register(data: RegisterData, db: Session = Depends(get_db)):
     Register new user
     :param data: RegisterData instance
     :param db: db connection
-    :return: new user data
+    :return: 201 Created
     """
     account = db.query(Account).filter_by(phone=data.phone).first()
 
     if not account:
         account = Account(
-            phone=data.phone,
-            password=data.password,
-            nickname=data.nickname,
-            account_type_id=ACCOUNT_DEFAULT_TYPE_ID
+            account_type_id=ACCOUNT_DEFAULT_TYPE_ID,
+            **data.dict()
         )
 
         db.add(account)
