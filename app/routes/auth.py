@@ -1,12 +1,14 @@
 from fastapi import APIRouter, Depends, Response, HTTPException
+from fastapi.security import OAuth2PasswordRequestForm
 from app.database import get_db
-from app.schemas.auth import RegisterData
-from app.models import Account
+from app.schemas.auth import RegisterData, Token
+from app.models import User
+from app.auth import oauth2_scheme, create_access_token, authenticate_user, get_current_user
 from sqlalchemy.orm import Session
 
 router = APIRouter()
 
-ACCOUNT_DEFAULT_TYPE_ID = 1
+USER_DEFAULT_TYPE_ID = 1
 
 
 @router.post('/register')
@@ -17,17 +19,41 @@ async def register(data: RegisterData, db: Session = Depends(get_db)):
     :param db: db connection
     :return: 201 Created
     """
-    account = db.query(Account).filter_by(phone=data.phone).first()
+    user = db.query(User).filter_by(phone=data.phone).first()
 
-    if not account:
-        account = Account(
-            account_type_id=ACCOUNT_DEFAULT_TYPE_ID,
+    if not user:
+        user = User(
+            user_type_id=USER_DEFAULT_TYPE_ID,
             **data.dict()
         )
 
-        db.add(account)
+        db.add(user)
         db.commit()
 
         return Response(status_code=201)
 
-    return HTTPException(status_code=409, detail="Account with given phone already exist")
+    return HTTPException(status_code=409, detail="User with given phone already exist")
+
+
+@router.post("/auth_token", response_model=Token)
+async def login_for_access_token(
+    form_data: OAuth2PasswordRequestForm = Depends(),
+    db: Session = Depends(get_db)
+):
+    user = authenticate_user(db, form_data.username, form_data.password)
+
+    if not user:
+        raise HTTPException(
+            status_code=401,
+            detail="Incorrect username or password",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
+    access_token = create_access_token(data={"sub": user.nickname})
+
+    return {"access_token": access_token, "token_type": "bearer"}
+
+
+@router.get("/items")
+async def read_items(current_user: User = Depends(get_current_user)):
+    return {"ok": "Huyok"}

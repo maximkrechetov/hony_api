@@ -1,5 +1,5 @@
-from .account import Account
-from .account_type import AccountType
+from .user import User
+from .user_type import UserType
 from .comment import Comment
 from .post import Post
 from .post_tag import PostTag

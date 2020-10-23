@@ -13,6 +13,7 @@ services:
       - .:/app
     environment:
       VIRTUAL_HOST: hony-app.test
+      SECRET_KEY: '2e66e11ea29680e830466bce91d6e0f8'
       DEBUG: 'true'
       DB_HOST: db
       DB_USER: hony

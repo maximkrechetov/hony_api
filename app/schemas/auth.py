@@ -25,3 +25,8 @@ class RegisterData(BaseModel):
             raise ValueError('Your age must be at least 16')
         return v
 
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+

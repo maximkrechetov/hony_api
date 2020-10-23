@@ -2,8 +2,8 @@ from sqlalchemy import Column, Integer, String, DateTime, func
 from app.database import Base
 
 
-class AccountType(Base):
-    __tablename__ = 'account_type'
+class UserType(Base):
+    __tablename__ = 'user_type'
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     alias = Column(String(32), nullable=False)
