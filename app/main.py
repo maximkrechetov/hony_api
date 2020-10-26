@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 # from os import environ
 # from starlette.middleware.sessions import SessionMiddleware
 from .database import engine, SessionLocal
-from .routes import common, auth, user
+from .routes import common, auth, user, tag
 from .models import Base
 
 Base.metadata.create_all(bind=engine)
@@ -22,4 +22,13 @@ app.add_middleware(
 
 app.include_router(common.router, tags=['common'])
 app.include_router(auth.router, tags=['auth'])
-app.include_router(user.router, tags=['user'])
+app.include_router(
+    user.router,
+    prefix='/user',
+    tags=['user']
+)
+app.include_router(
+    tag.router,
+    prefix='/tags',
+    tags=['tags']
+)

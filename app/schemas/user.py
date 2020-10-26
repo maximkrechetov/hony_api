@@ -3,7 +3,7 @@ from typing import Optional
 from pydantic import BaseModel
 
 
-class PostResponse(BaseModel):
+class PostModel(BaseModel):
     id: int
     title: str
     text: str
