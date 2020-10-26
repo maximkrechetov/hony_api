@@ -40,6 +40,12 @@ async def login_for_access_token(
     form_data: OAuth2PasswordRequestForm = Depends(),
     db: Session = Depends(get_db)
 ):
+    """
+    Authentication.
+    :param form_data: Form Data {login, password}
+    :param db: db Session
+    :return: Token object
+    """
     user = authenticate_user(db, form_data.username, form_data.password)
 
     if not user:
@@ -52,8 +58,3 @@ async def login_for_access_token(
     access_token = create_access_token(data={"sub": user.nickname})
 
     return {"access_token": access_token, "token_type": "bearer"}
-
-
-@router.get("/items")
-async def read_items(current_user: User = Depends(get_current_user)):
-    return {"ok": "Huyok"}

@@ -17,12 +17,12 @@ down_revision = None
 branch_labels = None
 depends_on = None
 
-conn = op.get_bind()
-inspector = Inspector.from_engine(conn)
-tables = inspector.get_table_names()
-
 
 def upgrade():
+    conn = op.get_bind()
+    inspector = Inspector.from_engine(conn)
+    tables = inspector.get_table_names()
+
     if 'user_type' not in tables:
         op.create_table(
             'user_type',
