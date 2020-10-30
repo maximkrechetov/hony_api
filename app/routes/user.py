@@ -2,14 +2,14 @@ from fastapi import APIRouter, Depends, Response, HTTPException
 from app.models import User, Post, PostTag, UserTag
 from app.database import get_db
 from app.auth import get_current_user
-from app.schemas.user import PostModel
+from app.schemas.post import PostRetrieveModel
 from sqlalchemy.orm import Session
 from typing import List
 
 router = APIRouter()
 
 
-@router.get('/feed', response_model=List[PostModel])
+@router.get('/feed', response_model=List[PostRetrieveModel])
 async def feed(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
@@ -27,4 +27,4 @@ async def feed(
             UserTag.user_id == current_user.id
         )
 
-    return [PostModel.from_orm(f) for f in feeds]
+    return [PostRetrieveModel.from_orm(f) for f in feeds]

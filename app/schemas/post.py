@@ -1,9 +1,17 @@
 from datetime import datetime
-from typing import Optional
+from typing import Optional, List
 from pydantic import BaseModel
 
 
-class PostModel(BaseModel):
+class PostCreateModel(BaseModel):
+    text: str
+    title: str
+    preview_text: str
+    cover: Optional[str] = None
+    tags: Optional[List[int]] = []
+
+
+class PostRetrieveModel(BaseModel):
     id: int
     title: str
     text: str
@@ -14,4 +22,3 @@ class PostModel(BaseModel):
 
     class Config:
         orm_mode = True
-
