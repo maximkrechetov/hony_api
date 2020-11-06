@@ -20,6 +20,8 @@ async def feed(
     :param db: Session instance
     :return: Posts related to tags user subscribed
     """
+    # TODO: add tags
+
     feeds = db.query(Post)\
         .join(PostTag, PostTag.post_id == Post.id)\
         .join(UserTag, UserTag.tag_id == PostTag.tag_id)\

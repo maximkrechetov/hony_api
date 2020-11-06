@@ -1,9 +1,11 @@
 from datetime import datetime
 from typing import Optional, List
 from pydantic import BaseModel
+from .tag import TagModel
 
 
-class PostCreateModel(BaseModel):
+class PostCreateUpdateModel(BaseModel):
+    id: Optional[int] = None
     text: str
     title: str
     preview_text: str
@@ -19,6 +21,7 @@ class PostRetrieveModel(BaseModel):
     cover: Optional[str] = None
     author_id: int
     created_at: datetime
+    updated_at: datetime
 
     class Config:
         orm_mode = True
