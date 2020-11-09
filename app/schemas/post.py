@@ -4,6 +4,11 @@ from pydantic import BaseModel
 from .tag import TagModel
 
 
+class AuthorModel(BaseModel):
+    first_name: str
+    last_name: str
+
+
 class PostCreateUpdateModel(BaseModel):
     id: Optional[int] = None
     text: str
@@ -19,9 +24,10 @@ class PostRetrieveModel(BaseModel):
     text: str
     preview_text: Optional[str] = None
     cover: Optional[str] = None
-    author_id: int
+    author: AuthorModel
     created_at: datetime
     updated_at: datetime
+    tags: List[TagModel]
 
     class Config:
         orm_mode = True

@@ -17,7 +17,6 @@ class User(DefaultModel):
             'pbkdf2_sha512',
             'md5_crypt'
         ],
-
         deprecated=['md5_crypt']
     ))
     user_type_id = Column(Integer, ForeignKey('user_type.id'), index=True, nullable=False)
