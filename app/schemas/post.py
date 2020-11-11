@@ -9,6 +9,10 @@ class AuthorModel(BaseModel):
     last_name: str
 
 
+class PostDeleteModel(BaseModel):
+    post_id: int
+
+
 class PostCreateUpdateModel(BaseModel):
     id: Optional[int] = None
     text: str

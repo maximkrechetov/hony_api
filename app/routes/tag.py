@@ -34,7 +34,7 @@ async def create_tag(
 
         return Response(status_code=201)
 
-    return HTTPException(status_code=409, detail="Tag already exists")
+    raise HTTPException(status_code=409, detail="Tag already exists")
 
 
 @router.post('/subscribe')
@@ -66,7 +66,7 @@ async def subscribe_tag(
 
         return Response(status_code=201)
 
-    return HTTPException(status_code=409, detail="Already subscribed")
+    raise HTTPException(status_code=409, detail="Already subscribed")
 
 
 @router.delete('/unsubscribe')
@@ -88,7 +88,7 @@ async def unsubscribe_tag(
     ).first()
 
     if not user_tag:
-        return HTTPException(status_code=404, detail="You are not subscribed already")
+        raise HTTPException(status_code=404, detail="You are not subscribed already")
 
     db.delete(user_tag)
     db.commit()

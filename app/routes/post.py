@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 from app.models import Post, User, Tag, PostTag
 from app.database import get_db
 from app.auth import get_current_user
-from app.schemas.post import PostCreateUpdateModel, PostRetrieveModel
+from app.schemas.post import PostCreateUpdateModel, PostRetrieveModel, PostDeleteModel
 
 
 router = APIRouter()
@@ -49,7 +49,7 @@ async def create(
     except Exception as e:
         db.rollback()
 
-        return HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 @router.put('/update')
@@ -69,7 +69,7 @@ async def update_post(
         post = db.query(Post).filter_by(id=data.id).first()
 
         if not post:
-            return HTTPException(status_code=404, detail='Post not found')
+            raise HTTPException(status_code=404, detail='Post not found')
 
         post.preview_text = data.preview_text
         post.text = data.text
@@ -105,6 +105,44 @@ async def update_post(
     except Exception as e:
         db.rollback()
 
-        return HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e))
 
+
+@router.delete('/delete')
+async def delete_post(
+    data: PostDeleteModel,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """
+    Delete post
+    :param data: post_id to unsubscribe
+    :param current_user: Current User instance
+    :param db: db instance
+    :return: 204 No Content
+    """
+    post = db.query(Post).filter_by(
+        author_id=current_user.id,
+        id=data.post_id
+    ).first()
+
+    if not post:
+        raise HTTPException(
+            status_code=404,
+            detail=f"Post with id {data.post_id} does not exists or not belongs to you"
+        )
+
+    post_tags = db.query(PostTag).filter_by(post_id=post.id).all()
+
+    try:
+        for pt in post_tags:
+            db.delete(pt)
+
+        db.delete(post)
+        db.commit()
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(status_code=500, detail=str(e))
+
+    return Response(status_code=204)
 

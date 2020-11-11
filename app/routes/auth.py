@@ -32,7 +32,7 @@ async def register(data: RegisterData, db: Session = Depends(get_db)):
 
         return Response(status_code=201)
 
-    return HTTPException(status_code=409, detail="User with given phone already exist")
+    raise HTTPException(status_code=409, detail="User with given phone already exist")
 
 
 @router.post("/auth_token", response_model=Token)
