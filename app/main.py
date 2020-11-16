@@ -1,14 +1,16 @@
 from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 # from os import environ
 # from starlette.middleware.sessions import SessionMiddleware
-from .database import engine, SessionLocal
+from .database import engine
 from .routes import common, auth, user, tag, post
 from .models import Base
 
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
+app.mount('/static', StaticFiles(directory='static'), name='static')
 
 app.add_middleware(
     CORSMiddleware,

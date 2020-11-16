@@ -1,21 +1,28 @@
-from fastapi import APIRouter, Depends, Response, HTTPException
+import sqlalchemy as sa
+import shutil
+import os
+
+from fastapi import APIRouter, Depends, Response, HTTPException, Query, UploadFile, File
 from app.models import User, Post, PostTag, UserTag, Tag
 from app.database import get_db
 from app.auth import get_current_user
 from app.schemas.post import PostRetrieveModel, AuthorModel
-from sqlalchemy.orm import Session
-from typing import List
+from typing import List, Optional
 
 router = APIRouter()
 
 
 @router.get('/feed', response_model=List[PostRetrieveModel])
 async def feed(
+    limit: Optional[int] = Query(15),
+    page: Optional[int] = Query(1),
     current_user: User = Depends(get_current_user),
-    db: Session = Depends(get_db)
+    db: sa.orm.Session = Depends(get_db)
 ):
     """
     Get user feed
+    :param limit: records on page limit
+    :param page: page number
     :param current_user: Current authentificated user
     :param db: Session instance
     :return: Posts related to tags user subscribed
@@ -25,7 +32,10 @@ async def feed(
         .join(UserTag, UserTag.tag_id == PostTag.tag_id)\
         .filter(
             UserTag.user_id == current_user.id
-        ).all()
+        ) \
+        .order_by(sa.desc(PostTag.created_at)) \
+        .limit(limit)\
+        .offset(limit * (page - 1))
 
     tags = db.query(
         PostTag.tag_id,
@@ -53,3 +63,36 @@ async def feed(
         })
 
     return result
+
+
+@router.post('/upload_avatar')
+async def upload_avatar(
+    file: UploadFile = File(...),
+    current_user: User = Depends(get_current_user),
+    db: sa.orm.Session = Depends(get_db)
+):
+    """
+    Uploads avatar and saves them
+    :param file: File object
+    :param current_user: Current authentificated user
+    :param db: Session instance
+    :return: Upload info
+    """
+    path = os.path.join('static/user_avatars', file.filename)
+
+    with open(path, 'wb+') as buffer:
+        shutil.copyfileobj(file.file, buffer)
+
+    if current_user.avatar:
+        if os.path.exists(current_user.avatar):
+            os.remove(current_user.avatar)
+
+    try:
+        current_user.avatar = path
+        db.add(current_user)
+        db.commit()
+    except Exception as e:
+        print(e)
+        db.rollback()
+
+    return {'filename': file.filename, 'path': path}
